@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Ports</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('Images/fond2.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1, h2 {
+            color: #004F9E;
+            text-align: center;
+        }
+        p {
+            line-height: 1.6;
+            text-align: justify;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        a {
+            color: #004F9E;
+            text-decoration: underline;
+        }
+        a:hover {
+            text-decoration: none;
+        }
+		.back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: #004F9E;
+            color: white;
+            font-size: 20px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .back-button:hover {
+            background-color: #002D59;
+        }
+        .back-button:active {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+	<button class="back-button" onclick="goBack()">&#8592;</button>
+
+    <script>
+        function goBack() {
+            history.back();
+        }
+    </script>
+	
+    <div class="container">
+        <h1>Liste des Ports de Plaisance</h1>
+        <p>
+            L'objectif est d'extraire les structures géométriques du port pour l'utiliser dans une possible optimisation à l'aide de la géométrie fractale.
+        </p>
+        <p>
+            Voici un ensemble de fiches sur les ports de plaisance français méditerranéens (excepté la Corse). Pour chaque port une photo satellite 
+            (Google Maps et Géoportail), la structure du mouillage, les coordonnées et pour certains une photographie aérienne.
+        </p>
+        <h2>La liste de tous les ports</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Région</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Ports LR -->
+                <tr><td>Argelès-sur-mer - Port Argelès</td><td>LR</td></tr>
+                <tr><td>Baie de Paulilles</td><td>LR</td></tr>
+                <tr><td>Banyuls-sur-mer</td><td>LR</td></tr>
+                <tr><td>Cabanes - Port Chichoulet</td><td>LR</td></tr>
+                <tr><td>Cabanes-Fleury</td><td>LR</td></tr>
+                <tr><td>Canet-en-Roussillon</td><td>LR</td></tr>
+                <tr><td>Cap d’Agde</td><td>LR</td></tr>
+                <tr><td>Carnon</td><td>LR</td></tr>
+                <tr><td>Cerbère</td><td>LR</td></tr>
+                <tr><td>Collioure</td><td>LR</td></tr>
+                <tr><td>Frontignan</td><td>LR</td></tr>
+                <tr><td>Grau d’Agde - Rives de l’Hérault</td><td>LR</td></tr>
+                <tr><td>Grau-du-Roi</td><td>LR</td></tr>
+                <tr><td>Gruissan</td><td>LR</td></tr>
+                <tr><td>Gruissan - Port de Barberousse</td><td>LR</td></tr>
+                <tr><td>La Grande Motte</td><td>LR</td></tr>
+                <tr><td>Marseillan-Plage</td><td>LR</td></tr>
+                <tr><td>Marseillan-Ville</td><td>LR</td></tr>
+                <tr><td>Narbonne-Plage</td><td>LR</td></tr>
+                <tr><td>Palavas-les-Flots</td><td>LR</td></tr>
+                <tr><td>Port Camargue</td><td>LR</td></tr>
+                <tr><td>Port-Ambonne</td><td>LR</td></tr>
+                <tr><td>Port-Barcarès - Port-Saint-Ange</td><td>LR</td></tr>
+                <tr><td>Port-La-Nouvelle</td><td>LR</td></tr>
+                <tr><td>Port-Leucate</td><td>LR</td></tr>
+                <tr><td>Port-Vendres</td><td>LR</td></tr>
+                <tr><td>Saint Cyprien</td><td>LR</td></tr>
+                <tr><td>Saint Cyprien - Les Capellans</td><td>LR</td></tr>
+                <tr><td>Sainte Marie la Mer</td><td>LR</td></tr>
+                <tr><td>Sérignan - Port de l’Orb</td><td>LR</td></tr>
+                <tr><td>Sète</td><td>LR</td></tr>
+                <tr><td>Valras-Plage</td><td>LR</td></tr>
+                <tr><td>Valras-Plage - Port Jean-Gau</td><td>LR</td></tr>
+                <!-- Ports PACA -->
+                <tr><td><a href="Ports/agay_019.html">Agay</a></td><td>PACA</td></tr>
+                <tr><td><a href="Ports/anse_de_l_argent_faux__antibes__022.html">Anse de l’Argent Faux (Antibes)</a></td><td>PACA</td></tr>
+                <tr><td>Anse de La Garoupe</td><td>PACA</td></tr>
+                <tr><td>Anse de la Scaletta</td><td>PACA</td></tr>
+                <tr><td>Anse de Passable</td><td>PACA</td></tr>
+                <tr><td>Antibes - Vauban</td><td>PACA</td></tr>
+                <tr><td><a href="Ports/bandol_025.html">Bandol</a></td><td>PACA</td></tr>
+                <tr><td>Beaulieu-sur-Mer avec chantier/port à sec</td><td>PACA</td></tr>
+                <tr><td>Beaulieu-sur-Mer - Les Fourmis</td><td>PACA</td></tr>
+                <tr><td>Bendor</td><td>PACA</td></tr>
+                <tr><td><a href="Ports/bormes_les_mimosas_028.html">Bormes-les-Mimosas</a></td><td>PACA</td></tr>
+                <tr><td>Boulouris - Le Toukan</td><td>PACA</td></tr>
+                <tr><td>Calanque de Figuerolles</td><td>PACA</td></tr>
+                <tr><td>Cannes</td><td>PACA</td></tr>
+                <tr><td>Cannes - port abri du Béal</td><td>PACA</td></tr>
+                <tr><td>Cannes - Port-Canto</td><td>PACA</td></tr>
+                <tr><td>Cannes-Marina</td><td>PACA</td></tr>
+                <tr><td>Cap d’Ail</td><td>PACA</td></tr>
+                <tr><td>Cap Martin</td><td>PACA</td></tr>
+                <tr><td>Carqueiranne-les-Salettes</td><td>PACA</td></tr>
+                <tr><td>Carro</td><td>PACA</td></tr>
+                <tr><td>Carry-le-Rouet</td><td>PACA</td></tr>
+                <tr><td>Cassis</td><td>PACA</td></tr>
+                <tr><td>Cavalaire-sur-Mer</td><td>PACA</td></tr>
+                <tr><td>Cogolin - Marines de</td><td>PACA</td></tr>
+                <tr><td>Cogolin - Port Cogolin</td><td>PACA</td></tr>
+                <tr><td>Eze-sur-Mer - Sylva Maris</td><td>PACA</td></tr>
+                <tr><td>Fos-sur-mer - St-Gervais</td><td>PACA</td></tr>
+                <tr><td>Fréjus - Port Fréjus</td><td>PACA</td></tr>
+                <tr><td>Golfe-Juan</td><td>PACA</td></tr>
+                <tr><td>Golfe-Juan - Camille Rayon</td><td>PACA</td></tr>
+                <tr><td>Hyères avec chantier/port à sec</td><td>PACA</td></tr>
+                <tr><td>Juan-les-Pins - Crouton</td><td>PACA</td></tr>
+                <tr><td>Juan-les-Pins - Gallice</td><td>PACA</td></tr>
+                <tr><td>Juan-les-Pins - La Salis</td><td>PACA</td></tr>
+                <tr><td>La Ciotat</td><td>PACA</td></tr>
+                <tr><td>La Ciotat - bassins Bérouard et des Capucins</td><td>PACA</td></tr>
+                <tr><td>La Figueirette</td><td>PACA</td></tr>
+                <tr><td>La Galère</td><td>PACA</td></tr>
+                <tr><td>La Madrague</td><td>PACA</td></tr>
+                <tr><td>La Rague</td><td>PACA</td></tr>
+                <tr><td>La Seyne-sur-Mer avec chantier/port à sec</td><td>PACA</td></tr>
+                <tr><td>Le Brusc</td><td>PACA</td></tr>
+                <tr><td>Le Lavandou avec chantier/port à sec</td><td>PACA</td></tr>
+                <tr><td>Les Issambres - Ferréol</td><td>PACA</td></tr>
+                <tr><td>Les Issambres - Port Tonic</td><td>PACA</td></tr>
+                <tr><td>Les Issambres - San-Peïre</td><td>PACA</td></tr>
+                <tr><td>Mandelieu-la-Napoule</td><td>PACA</td></tr>
+                <tr><td>Marina-Baie-des-Anges</td><td>PACA</td></tr>
+                <tr><td>Martigues avec chantier/port à sec</td><td>PACA</td></tr>
+                <tr><td>Menton</td><td>PACA</td></tr>
+                <tr><td>Menton - Garavan</td><td>PACA</td></tr>
+                <tr><td>Miramar-la-Londe - Port Miramar</td><td>PACA</td></tr>
+                <tr><td>Nice</td><td>PACA</td></tr>
+                <tr><td>Pampelonne</td><td>PACA</td></tr>
+                <tr><td>Pointe de Lilong</td><td>PACA</td></tr>
+                <tr><td>Porquerolles</td><td>PACA</td></tr>
+                <tr><td>Port de Corbières</td><td>PACA</td></tr>
+                <tr><td>Port du Poussaï - plage du Débarquement</td><td>PACA</td></tr>
+                <tr><td>Port Napoléon</td><td>PACA</td></tr>
+                <tr><td>Port-de-Bouc</td><td>PACA</td></tr>
+                <tr><td>Port-de-Bouc - La Lèque</td><td>PACA</td></tr>
+                <tr><td>Port-Grimaud</td><td>PACA</td></tr>
+                <tr><td>Port-St Louis-du-Rhône</td><td>PACA</td></tr>
+                <tr><td>Port-St Louis-du-Rhône - Navy Service</td><td>PACA</td></tr>
+                <tr><td>Saint Cyr les Lecques</td><td>PACA</td></tr>
+                <tr><td>Saint Elme - Les Sablettes</td><td>PACA</td></tr>
+                <tr><td>Saint Raphaël</td><td>PACA</td></tr>
+                <tr><td>Saint Raphaël - Santa Lucia</td><td>PACA</td></tr>
+                <tr><td>Saint Tropez</td><td>PACA</td></tr>
+                <tr><td>Saint-Aygulf</td><td>PACA</td></tr>
+                <tr><td>Saint-Jean-Cap-Ferrat</td><td>PACA</td></tr>
+                <tr><td>Saint-Laurent-du-Var</td><td>PACA</td></tr>
+                <tr><td>Saint-Pierre-des-Embiez</td><td>PACA</td></tr>
+                <tr><td>Sainte Maxime</td><td>PACA</td></tr>
+                <tr><td>Saintes-Maries-de-la-mer - Port Gardian</td><td>PACA</td></tr>
+                <tr><td>Sanary-sur-Mer</td><td>PACA</td></tr>
+                <tr><td>Sausset-les-Pins</td><td>PACA</td></tr>
+                <tr><td>Six-Fours Plages - La Coudoulière</td><td>PACA</td></tr>
+                <tr><td>Théoule-sur-Mer</td><td>PACA</td></tr>
+                <tr><td>Villefranche-sur-Mer</td><td>PACA</td></tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
