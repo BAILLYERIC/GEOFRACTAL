@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours de BAILLY Éric</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: url("Images/FOND2.png") no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+        }
+        header img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+        h1, h2 {
+            color: #004F9E;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin-bottom: 10px;
+        }
+        .subheading {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+		.back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: #004F9E;
+            color: white;
+            font-size: 20px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .back-button:hover {
+            background-color: #002D59;
+        }
+        .back-button:active {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+	<button class="back-button" onclick="goBack()">&#8592;</button>
+
+    <script>
+        function goBack() {
+            history.back();
+        }
+    </script>
+	
+    <div class="container">
+        <header>
+			<h1>Voici les cours que je dispense en 2024</h1>      
+            <h1>L1 L2 LPRO <h1>
+			<h2>un click sur le titre et vous aurez le Syllabus complet</h2> 	
+        </header>
+		
+        <section>
+            <h2>L1</h2>
+            <p><a href="Cours/SyllabusCARTO1.html" target="_blank"> CARTOGRAPHIE 1</a> ---- 10 séances 2h </p>
+			<p><a href="Cours/SyllabusSTAT.html" target="_blank"> STATISTIQUES</a> ---- 10 séances 2h</p>
+		</section>
+
+        <section>
+            <h2>L2</h2>
+            <a href="Cours/SyllabusCARTO2.html" target="_blank"> CARTOGRAPHIE 2</a> ---- 10 séances 2h
+			</p><p>
+			<a href="Cours/SyllabusCARTO3.html" target="_blank"> OUTILS POUR GEOGRAPHES</a> ---- 10 séances 2h
+        </section>
+
+        <section>
+            <h2>LPRO</h2>
+            <a href="Cours/SyllabusLPRO.html" target="_blank"> LPRO</a> ---- 10 séances 3h
+        </section>
+
+        
+    </div>
+</body>
+</html>

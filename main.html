@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page principale</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url("Images/FOND.png") no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+        .header img {
+            max-width: 100px;
+        }
+        .contact {
+            text-align: right;
+            margin-top: 20px;
+        }
+        .logo-central {
+            text-align: center;
+            margin: 50px 0;
+        }
+        .logo-central img {
+            max-width: 200px;
+            cursor: pointer;
+        }
+		.logo-central img {
+			transition: transform 0.3s;
+		}
+		.logo-central img:hover {
+			transform: scale(1.1);
+		}
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+        .buttons img {
+            max-width: 150px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .buttons img:hover {
+            transform: scale(1.1);
+        }
+		
+    </style>
+</head>
+<body>
+	
+    <!-- En-tête avec les logos -->
+    <div class="header">
+        
+        
+    </div>
+
+    <!-- Logo central avec lien -->
+    <div class="logo-central">
+        <img src="Images/Logocentral.png" alt="Logo central" onclick="window.location.href='cv.html'">
+    </div>
+
+    <!-- Boutons en bas -->
+    <div class="buttons">
+        <img src="Images/BOUTON1.png" alt="Bouton 1" onclick="window.location.href='Cours.html'">
+        <img src="Images/BOUTON2.png" alt="Bouton 2" onclick="window.location.href='Interressant.html'">
+        <img src="Images/BOUTON3.png" alt="Bouton 3" onclick="window.location.href='Recherche.html'">
+    </div>
+</body>
+</html>
