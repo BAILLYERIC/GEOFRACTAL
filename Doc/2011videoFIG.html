@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture Vidéo Directe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: url('FOND2.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+        }
+        .video-container {
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        video {
+            width: 640px;
+            height: 360px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: black;
+        }
+        h1 {
+            color: #004F9E;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1> FIG 2011</h1>
+    <div class="video-container">
+        <video controls autoplay>
+            <source src="2011FIG.mp4" type="video/mp4">
+            Votre navigateur ne supporte pas la lecture de cette vidéo.
+        </video>
+    </div>
+</body>
+</html>
