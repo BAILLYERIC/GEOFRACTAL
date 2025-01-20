@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation Démographique</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f4f4f9;
+            padding: 2em;
+        }
+        h2 {
+            font-size: 1em;
+            margin-bottom: 1em;
+        }
+        canvas {
+            background: white;
+            display: block;
+            border: 2px solid black;
+            margin: auto;
+        }
+        .control-row {
+            display: flex;
+            justify-content: center;
+            gap: 1em;
+            margin-top: 1em;
+        }
+        button, input[type="range"], input[type="number"] {
+            padding: 0.5em;
+            font-size: 0.8em;
+        }
+        label {
+            display: block;
+            margin: 0.5em;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Simulation Démographique</h2>
+<canvas id="graphCanvas" width="800" height="250"></canvas>
+
+<div class="control-row">
+    <button id="paramButton">Paramètres</button>
+    <label>
+        Population Initiale:
+        <input type="number" id="initPop" min="1" max="1000" value="100">
+    </label>
+    <button id="startButton">Démarrer</button>
+</div>
+
+<label>
+    Taux de mortalité:
+    <input type="range" id="mortRate" min="0" max="100" value="10">
+    <span id="mortDisplay">10</span>%
+</label>
+
+<label>
+    Taux de natalité:
+    <input type="range" id="birthRate" min="0" max="100" value="15">
+    <span id="birthDisplay">15</span>%
+</label>
+
+<!-- Script JavaScript -->
+<script>
+const canvas = document.getElementById("graphCanvas");
+const ctx = canvas.getContext("2d");
+
+// Variables globales
+let population = 100;
+let tauxMortalite = 10;
+let tauxNatalite = 15;
+let temps = 0;
+const historique = [];
+
+// Mise à jour des valeurs affichées
+document.getElementById("mortRate").addEventListener("input", (e) => {
+    tauxMortalite = parseInt(e.target.value);
+    document.getElementById("mortDisplay").textContent = tauxMortalite;
+});
+
+document.getElementById("birthRate").addEventListener("input", (e) => {
+    tauxNatalite = parseInt(e.target.value);
+    document.getElementById("birthDisplay").textContent = tauxNatalite;
+});
+
+// Initialisation de la population
+document.getElementById("paramButton").addEventListener("click", () => {
+    population = parseInt(document.getElementById("initPop").value);
+    temps = 0;
+    historique.length = 0;
+    dessinerGraphique();
+});
+
+// Calcul de la population et tracé du graphique
+document.getElementById("startButton").addEventListener("click", () => {
+    if (population <= 0) return;
+
+    const interval = setInterval(() => {
+        temps++;
+        if (temps > 100 || population <= 0) {
+            clearInterval(interval);
+            return;
+        }
+
+        population += population * (tauxNatalite - tauxMortalite) / 100;
+        population = Math.max(0, Math.round(population));
+        
+        historique.push({ t: temps, pop: population });
+
+        dessinerGraphique();
+    }, 500);
+});
+
+// Fonction de dessin du graphique
+function dessinerGraphique() {
+    // Effacer le canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Dessiner les axes
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+
+    // Axe des abscisses (temps)
+    ctx.beginPath();
+    ctx.moveTo(50, 200);  
+    ctx.lineTo(750, 200);  
+    ctx.stroke();
+    ctx.fillText("Temps", 700, 220);
+
+    // Axe des ordonnées (population)
+    ctx.beginPath();
+    ctx.moveTo(50, 200);  
+    ctx.lineTo(50, 50);   
+    ctx.stroke();
+    ctx.fillText("Population", 10, 60);
+
+    // Graduation des axes
+    ctx.font = "10px Arial";
+    for (let t = 0; t <= 100; t += 10) {
+        const x = 50 + t * 7;
+        ctx.fillText(t, x, 215);  // Temps
+    }
+
+    for (let p = 0; p <= 1000; p += 100) {
+        const y = 200 - p * 0.15;
+        ctx.fillText(p, 30, y);  // Population
+    }
+
+    // Tracé de la courbe de population
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+
+    historique.forEach((point, index) => {
+        const x = 50 + point.t * 7;
+        const y = 200 - point.pop * 0.15;
+
+        if (index === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    });
+
+    ctx.stroke();
+}
+</script>
+
+</body>
+</html>

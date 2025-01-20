@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modèle de Malthus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background: #f4f4f9; 
+            padding: 2em; 
+        }
+        .container {
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            gap: 2em; 
+            flex-wrap: wrap;
+        }
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 242px;  
+        }
+        h1 {
+            font-size: 1.2em; 
+            margin: 0;
+            padding: 0.5em 0;
+        }
+        canvas {
+            width: 576px !important;  
+            height: 432px !important;  
+            background: white; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        form, .cadre-explicatif {
+            width: 100%;  
+            background: white; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            padding: 1em; 
+            text-align: left;
+            font-size: 0.8em; 
+        }
+        form h2 {
+            font-size: 1em; 
+            margin: 0; 
+            padding: 0.5em 0;
+            display: inline-block;
+        }
+        form button {
+            background: #4CAF50; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            padding: 0.4em 0.8em; 
+            font-size: 0.8em; 
+            margin-left: 1em; 
+            border-radius: 4px;
+        }
+        form button:hover { background: #45a049; }
+        table {
+            width: 100%;
+            margin-top: 1em;
+            border-collapse: collapse;
+            font-size: 0.8em;
+        }
+        th, td {
+            padding: 0.3em;
+            text-align: left;
+        }
+        th {
+            background: #f0f0f0;
+        }
+        input[type="number"] {
+            width: 90%;
+            padding: 0.4em;
+            font-size: 0.8em;
+        }
+        #avertissement {
+            color: red; 
+            font-weight: bold; 
+            margin-top: 1em;
+            font-size: 0.75em; 
+        }
+        .cadre-explicatif {
+            margin-top: 1em;
+            line-height: 1.4;
+            font-size: 0.7em;  /* Réduction de la taille */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Modèle de Croissance de Malthus</h1>
+
+<div class="container">
+    <canvas id="malthusChart"></canvas>
+
+    <!-- Encarts Alignés -->
+    <div class="side-panel">
+        <!-- Encart Paramètres -->
+        <form id="malthusForm">
+            <div>
+                <h2>Paramètres</h2>
+                <button type="submit">Calculer</button>
+            </div>
+
+            <label for="temps">Années :</label>
+            <input type="number" id="temps" min="1" required>
+
+            <table>
+                <tr>
+                    <th>Courbe</th>
+                    <th>Initiale</th>
+                    <th>Tx Croissance (%)</th>
+                </tr>
+                <tr>
+                    <td>Population</td>
+                    <td><input type="number" id="popInitial" min="1" required></td>
+                    <td><input type="number" id="popCroissance" min="0" step="0.01" required></td>
+                </tr>
+                <tr>
+                    <td>Ressources</td>
+                    <td><input type="number" id="resInitial" min="1" value="4" required></td>
+                    <td><input type="number" id="resCroissance" min="0" step="0.01" value="0" required></td>
+                </tr>
+            </table>
+
+            <div id="avertissement"></div>
+        </form>
+
+        <!-- Encart Explicatif -->
+        <div class="cadre-explicatif">
+            <h2>Modèle de Malthus</h2>
+            <strong>Thomas Robert Malthus</strong>, économiste et démographe britannique du XVIIIe siècle, a exposé sa théorie dans son ouvrage <em>An Essay on the Principle of Population</em> (1798).  
+            <br><br>
+            <strong>Principe du modèle :</strong><br>  
+            - Croissance de la population : augmente de manière exponentielle<br>  
+            - Croissance des ressources alimentaires : augmentent de manière arithmétique<br>  
+            <br>
+            <strong>Conséquences prévues :</strong><br>  
+            - Une pénurie alimentaire<br>  
+            - Des crises démographiques
+        </div>
+    </div>
+</div>
+
+<!-- Bibliothèque Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.getElementById("malthusForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    document.getElementById("avertissement").innerHTML = "";
+
+    let temps = parseInt(document.getElementById("temps").value);
+    let popInitial = parseFloat(document.getElementById("popInitial").value);
+    let popCroissance = parseFloat(document.getElementById("popCroissance").value) / 100;
+    let resInitial = parseFloat(document.getElementById("resInitial").value);
+    let resCroissance = parseFloat(document.getElementById("resCroissance").value) / 100;
+
+    let annees = [];
+    let populations = [];
+    let ressources = [];
+    let croisement = null;
+
+    for (let t = 0; t <= temps; t++) {
+        annees.push(t);
+        let popValue = popInitial * Math.pow((1 + popCroissance), t);
+        let resValue = resInitial * Math.pow((1 + resCroissance), t);
+
+        populations.push(popValue);
+        ressources.push(resValue);
+
+        if (!croisement && popValue > resValue) {
+            croisement = { t, popValue, resValue };
+            document.getElementById("avertissement").innerHTML = 
+                `Croisement détecté à l'année ${croisement.t} :<br> 
+                Population = ${croisement.popValue.toFixed(2)}<br>
+                Ressources = ${croisement.resValue.toFixed(2)}`;
+        }
+    }
+
+    const ctx = document.getElementById('malthusChart').getContext('2d');
+
+    if (window.myChart) window.myChart.destroy();
+
+    window.myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: annees,
+            datasets: [
+                {
+                    label: 'Population',
+                    data: populations,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    tension: 0,
+                    fill: false,
+                    pointRadius: 0
+                },
+                {
+                    label: 'Ressources',
+                    data: ressources,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    tension: 0,
+                    fill: false,
+                    pointRadius: 0
+                },
+                croisement ? {
+                    label: 'Croisement',
+                    data: [{ x: croisement.t, y: croisement.popValue }],
+                    borderColor: 'black',
+                    backgroundColor: 'red',
+                    pointRadius: 8,
+                    pointStyle: 'circle',
+                    fill: false,
+                    showLine: false
+                } : {}
+            ]
+        }
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation Pixel Aléatoire</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f4f4f9;
+            padding: 2em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+        }
+        h2 {
+            font-size: 1em;
+            margin-bottom: 0.5em;
+        }
+        canvas {
+            background: green;
+            display: block;
+            border: 2px solid black;
+        }
+        button {
+            font-size: 0.8em;
+            padding: 0.2em 0.4em;
+            border: 1px solid black;
+            background: white;
+            width: 4em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Simulation d'un Pixel Aléatoire</h2>
+<canvas id="simulationCanvas"></canvas>
+
+<div>
+    <button id="riverButton">Rivière</button>
+    <button id="bridgeButton">Pont</button>
+</div>
+
+<label>
+    Nombre de Pixels Noirs:
+    <input type="range" id="pixelCount" min="1" max="10" value="1">
+    <span id="pixelCountDisplay">1</span>
+</label>
+
+<!-- Script JavaScript -->
+<script>
+// Paramètres de la matrice
+const tailleMatrice = 16;        // Taille de la matrice (16x16)
+const pixelTaille = 40;         // Taille des pixels de la matrice et du pixel noir
+const canvas = document.getElementById("simulationCanvas");
+const ctx = canvas.getContext("2d");
+let riviereActive = false;      // Indicateur si la rivière est activée
+let ponts = [];                 // Liste des positions des ponts rouges
+const colonneRiviere = Math.floor(tailleMatrice / 2);  // Colonne de la rivière
+
+// Liste des positions des pixels noirs
+let pixelsNoirs = [{ x: tailleMatrice - 1, y: Math.floor(Math.random() * tailleMatrice) }];
+
+// Ajustement de la taille du canvas
+canvas.width = tailleMatrice * pixelTaille;
+canvas.height = tailleMatrice * pixelTaille;
+
+// Fonction de dessin du quadrillage
+function dessinerQuadrillage() {
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+
+    // Lignes horizontales
+    for (let y = 0; y <= tailleMatrice; y++) {
+        ctx.beginPath();
+        ctx.moveTo(0, y * pixelTaille);
+        ctx.lineTo(canvas.width, y * pixelTaille);
+        ctx.stroke();
+    }
+
+    // Lignes verticales
+    for (let x = 0; x <= tailleMatrice; x++) {
+        ctx.beginPath();
+        ctx.moveTo(x * pixelTaille, 0);
+        ctx.lineTo(x * pixelTaille, canvas.height);
+        ctx.stroke();
+    }
+}
+
+// Fonction de déplacement aléatoire
+function deplacerPixels() {
+    // Efface le canvas et redessine le quadrillage
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    dessinerQuadrillage();
+
+    // Si la rivière est active, la redessiner
+    if (riviereActive) tracerRiviere();
+
+    // Dessiner les ponts
+    ponts.forEach(tracerPont);
+
+    // Déplacer chaque pixel noir
+    pixelsNoirs.forEach(pixel => {
+        ctx.fillStyle = "black";
+        ctx.fillRect(pixel.x * pixelTaille, pixel.y * pixelTaille, pixelTaille, pixelTaille);
+
+        // Calcul du déplacement contigu (8 directions possibles)
+        const directions = [
+            [-1, -1], [0, -1], [1, -1],  // Haut-gauche, Haut, Haut-droite
+            [-1,  0],          [1,  0],  // Gauche,        Droite
+            [-1,  1], [0,  1], [1,  1]   // Bas-gauche,  Bas, Bas-droite
+        ];
+
+        const [dx, dy] = directions[Math.floor(Math.random() * directions.length)];
+        const newX = pixel.x + dx;
+        const newY = pixel.y + dy;
+
+        // Vérifier les limites et collisions
+        if (
+            newX >= 0 && newX < tailleMatrice &&
+            newY >= 0 && newY < tailleMatrice &&
+            !(
+                riviereActive && 
+                newX === colonneRiviere && 
+                !ponts.includes(newY)
+            )
+        ) {
+            pixel.x = newX;
+            pixel.y = newY;
+        }
+    });
+}
+
+// Fonction de tracé de la rivière
+function tracerRiviere() {
+    ctx.fillStyle = "blue";
+    for (let y = 0; y < tailleMatrice; y++) {
+        ctx.fillRect(colonneRiviere * pixelTaille, y * pixelTaille, pixelTaille, pixelTaille);
+    }
+}
+
+// Fonction de tracé d'un pont
+function tracerPont(y) {
+    ctx.fillStyle = "red";
+    ctx.fillRect(colonneRiviere * pixelTaille, y * pixelTaille, pixelTaille, pixelTaille);
+}
+
+// Gestion de la sélection du nombre de pixels
+document.getElementById("pixelCount").addEventListener("input", event => {
+    const count = parseInt(event.target.value, 10);
+    document.getElementById("pixelCountDisplay").textContent = count;
+
+    // Réinitialiser la liste des pixels noirs
+    pixelsNoirs = Array.from({ length: count }, () => ({
+        x: tailleMatrice - 1,
+        y: Math.floor(Math.random() * tailleMatrice)
+    }));
+});
+
+// Activer la rivière au clic
+document.getElementById("riverButton").addEventListener("click", () => {
+    riviereActive = true;
+});
+
+// Activer un nouveau pont au clic
+document.getElementById("bridgeButton").addEventListener("click", () => {
+    const newPontY = Math.floor(Math.random() * tailleMatrice);
+    if (!ponts.includes(newPontY)) ponts.push(newPontY);
+});
+
+// Boucle de mise à jour
+setInterval(deplacerPixels, 300);
+</script>
+
+</body>
+</html>

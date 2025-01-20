@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DLA Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #222;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            border: 1px solid white;
+            display: block;
+            margin-top: 20px;
+        }
+
+        #controls {
+            margin-top: 20px;
+        }
+
+        #pauseSimulation {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Simulation DLA (Diffusion-Limited Aggregation)</h1>
+    <div id="controls">
+        <label for="pointCount">Nombre de points : </label>
+        <input id="pointCount" type="range" min="1" max="1000" value="100">
+        <span id="pointCountValue">100</span>
+        <button id="startSimulation">Démarrer</button>
+        <button id="pauseSimulation">Pause</button>
+    </div>
+    <canvas id="dlaCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("dlaCanvas");
+        const ctx = canvas.getContext("2d");
+        const pointCountInput = document.getElementById("pointCount");
+        const pointCountValue = document.getElementById("pointCountValue");
+        const startButton = document.getElementById("startSimulation");
+        const pauseButton = document.getElementById("pauseSimulation");
+
+        const size = 150; // Matrice 150x150
+        const scale = Math.min(window.innerWidth, window.innerHeight) / size;
+        canvas.width = size * scale;
+        canvas.height = size * scale;
+
+        let matrix = Array.from({ length: size }, () => Array(size).fill(0));
+        let particles = [];
+        const directions = [
+            [0, -1], [0, 1], [-1, 0], [1, 0], // Haut, bas, gauche, droite
+            [-1, -1], [1, 1], [-1, 1], [1, -1] // Diagonales
+        ];
+
+        let animationId;
+        let isPaused = false;
+
+        pointCountInput.addEventListener("input", () => {
+            pointCountValue.textContent = pointCountInput.value;
+        });
+
+        startButton.addEventListener("click", startSimulation);
+        pauseButton.addEventListener("click", togglePause);
+
+        function startSimulation() {
+            resetSimulation();
+            const pointCount = parseInt(pointCountInput.value);
+            generateInitialParticles(pointCount);
+            matrix[Math.floor(size / 2)][Math.floor(size / 2)] = 1; // Point central
+            drawMatrix();
+            isPaused = false;
+            animate();
+        }
+
+        function togglePause() {
+            if (isPaused) {
+                isPaused = false;
+                animate();
+            } else {
+                isPaused = true;
+                cancelAnimationFrame(animationId);
+            }
+        }
+
+        function resetSimulation() {
+            matrix = Array.from({ length: size }, () => Array(size).fill(0));
+            particles = [];
+        }
+
+        function generateInitialParticles(count) {
+            for (let i = 0; i < count; i++) {
+                let x, y;
+                if (Math.random() < 0.5) {
+                    // Haut ou bas
+                    x = Math.floor(Math.random() * size);
+                    y = Math.random() < 0.5 ? 0 : size - 1;
+                } else {
+                    // Gauche ou droite
+                    x = Math.random() < 0.5 ? 0 : size - 1;
+                    y = Math.floor(Math.random() * size);
+                }
+                particles.push({ x, y });
+            }
+        }
+
+        function drawMatrix() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let x = 0; x < size; x++) {
+                for (let y = 0; y < size; y++) {
+                    if (matrix[x][y] === 1) {
+                        ctx.fillStyle = "white";
+                        ctx.fillRect(x * scale, y * scale, scale, scale);
+                    }
+                }
+            }
+            particles.forEach(p => {
+                ctx.fillStyle = "red";
+                ctx.fillRect(p.x * scale, p.y * scale, scale, scale);
+            });
+        }
+
+        function animate() {
+            if (isPaused) return;
+            const newParticles = [];
+            particles.forEach(p => {
+                const dir = directions[Math.floor(Math.random() * directions.length)];
+                const newX = Math.min(size - 1, Math.max(0, p.x + dir[0]));
+                const newY = Math.min(size - 1, Math.max(0, p.y + dir[1]));
+
+                if (matrix[newX][newY] === 1) {
+                    matrix[p.x][p.y] = 1;
+                    generateInitialParticles(1); // Générer un nouveau point
+                } else {
+                    p.x = newX;
+                    p.y = newY;
+                    newParticles.push(p);
+                }
+            });
+
+            particles = newParticles;
+            drawMatrix();
+
+            if (particles.length > 0) {
+                animationId = requestAnimationFrame(animate);
+            }
+        }
+    </script>
+</body>
+
+</html>

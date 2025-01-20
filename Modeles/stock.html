@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation de Stock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f4f4f9;
+            padding: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 1em;
+        }
+        canvas {
+            background: white;
+            border: 2px solid black;
+        }
+        .control-panel {
+            margin-top: 2em;
+        }
+        input[type="number"] {
+            margin: 0.5em;
+            padding: 0.5em;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Simulation de Stock</h2>
+
+<!-- Canvas pour la simulation -->
+<canvas id="simulationCanvas" width="800" height="300"></canvas>
+
+<!-- Panneau de Contrôle -->
+<div class="control-panel">
+    <label>Stock Initial:
+        <input type="number" id="initStock" min="0" value="10">
+    </label>
+
+    <label>Débit Entrée (%):
+        <input type="number" id="entryRate" min="0" max="100" value="10">
+    </label>
+
+    <label>Débit Sortie (%):
+        <input type="number" id="exitRate" min="0" max="100" value="10">
+    </label>
+</div>
+
+<!-- Script JavaScript -->
+<script>
+// Variables globales
+const canvas = document.getElementById("simulationCanvas");
+const ctx = canvas.getContext("2d");
+let stock = 10;      // Stock initial fixé à 10
+let entryRate = 10;  // En pourcentage
+let exitRate = 10;   // En pourcentage
+let temps = 0;
+let interval;
+
+// Fonction de mise à jour de l'affichage
+function dessiner() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Affichage du temps
+    ctx.fillStyle = "black";
+    ctx.font = "16px Arial";
+    ctx.fillText(`Temps: ${temps}s`, 360, 50);
+
+    // Flèche d'entrée (gauche)
+    ctx.beginPath();
+    ctx.moveTo(150, 150);  // Pointe
+    ctx.lineTo(100, 120);  // Haut
+    ctx.lineTo(100, 180);  // Bas
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillText("Entrée", 110, 190);
+
+    // Flèche de sortie (droite)
+    ctx.beginPath();
+    ctx.moveTo(650, 150);  // Pointe
+    ctx.lineTo(600, 120);  // Haut
+    ctx.lineTo(600, 180);  // Bas
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillText("Sortie", 610, 190);
+
+    // Rectangle de stockage
+    ctx.strokeStyle = "black";
+    ctx.strokeRect(300, 100, 200, 100);
+
+    // Remplissage du stock
+    const filledHeight = Math.min(stock, 100);
+    ctx.fillStyle = "lightblue";
+    ctx.fillRect(300, 200 - filledHeight, 200, filledHeight);
+
+    // Affichage du stock
+    ctx.fillStyle = "black";
+    ctx.fillText(`Stock: ${Math.round(stock)}`, 360, 230);
+}
+
+// Fonction de simulation
+function mettreAJourStock() {
+    const tauxNet = (entryRate - exitRate) / 100;
+    stock *= 1 + tauxNet;
+    stock = Math.max(0, stock);  // Empêche le stock négatif
+    temps++;
+    dessiner();
+}
+
+// Écouteurs de changements indépendants
+document.getElementById("initStock").addEventListener("input", () => {
+    stock = parseFloat(document.getElementById("initStock").value);
+    dessiner();
+});
+
+document.getElementById("entryRate").addEventListener("input", () => {
+    entryRate = parseFloat(document.getElementById("entryRate").value);
+});
+
+document.getElementById("exitRate").addEventListener("input", () => {
+    exitRate = parseFloat(document.getElementById("exitRate").value);
+});
+
+// Simulation automatique et continue
+clearInterval(interval);
+interval = setInterval(mettreAJourStock, 1000);
+
+// Initialisation de l'affichage
+dessiner();
+</script>
+
+</body>
+</html>

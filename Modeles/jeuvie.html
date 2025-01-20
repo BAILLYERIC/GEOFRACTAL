@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de la Vie - Conway</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            align-items: center;
+            justify-content: center;
+        }
+        #canvas {
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+        #controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        #controls button, #controls label {
+            margin: 5px;
+        }
+        #description {
+            text-align: left;
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            max-width: 800px;
+        }
+        #description h1 {
+            text-align: center;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div id="description">
+        <h1>Jeu de la Vie - John Conway</h1>
+        <p>
+            Le Jeu de la vie de John Conway est un automate cellulaire, conçu pour simuler des phénomènes émergents à partir de règles simples.
+        </p>
+        <h2>Principe de base</h2>
+        <ul>
+            <li>L'univers est représenté par une grille 2D composée de cellules.</li>
+            <li>Chaque cellule peut être vivante (bleue) ou morte (blanche).</li>
+            <li>À chaque itération, l'état des cellules évolue selon des règles précises.</li>
+        </ul>
+        <h2>Règles du jeu</h2>
+        <ol>
+            <li><strong>Survie :</strong>
+                <ul>
+                    <li>Une cellule bleue reste vivante si elle a 2 ou 3 voisins vivants.</li>
+                    <li>Sinon, elle meurt par surpopulation (plus de 3 voisins) ou isolement (moins de 2 voisins).</li>
+                </ul>
+            </li>
+            <li><strong>Naissance :</strong>
+                <ul>
+                    <li>Une cellule morte devient vivante si elle a exactement 3 voisins vivants.</li>
+                </ul>
+            </li>
+            <li><strong>Stabilité ou extinction :</strong>
+                <ul>
+                    <li>Une cellule morte reste morte si elle n'a pas 3 voisins vivants.</li>
+                </ul>
+            </li>
+        </ol>
+        <h2>Concepts clés</h2>
+        <ul>
+            <li><strong>Voisins :</strong> Une cellule a 8 voisins directs (haut, bas, gauche, droite et diagonales).</li>
+            <li><strong>Évolution :</strong> L'ensemble de la grille est mis à jour simultanément à chaque génération.</li>
+            <li><strong>État initial :</strong> L'utilisateur peut définir la grille de départ (manuellement ou aléatoirement).</li>
+            
+        </ul>
+    </div>
+    <canvas id="canvas"></canvas>
+    
+    <div id="controls">
+        <button id="random">Tirage aléatoire</button>
+        <button id="step">Pas à pas</button>
+        <button id="toggle">Démarrer</button>
+        <label id="size-label">Taille : 50x50</label>
+        <button data-size="50">50x50</button>
+        <button data-size="100">100x100</button>
+        <button data-size="200">200x200</button>
+    </div>
+	<div style="margin-top: 10px; font-size: 1.2em; font-weight: bold; text-align: center;">
+        Phénomènes émergents : Certaines configurations créent des structures dynamiques intéressantes.
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const controls = document.getElementById('controls');
+        const sizeLabel = document.getElementById('size-label');
+
+        let gridSize = 50;
+        let cellSize = 10;
+        let grid;
+        let running = false;
+
+        function initGrid(size) {
+            grid = Array.from({ length: size }, () => Array(size).fill(0));
+            adjustCanvasSize(size);
+        }
+
+        function adjustCanvasSize(size) {
+            const availableWidth = Math.min(window.innerWidth - 20, window.innerHeight - 100);
+            cellSize = Math.floor(availableWidth / size);
+            canvas.width = cellSize * size;
+            canvas.height = cellSize * size;
+        }
+
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    ctx.fillStyle = grid[y][x] ? 'blue' : 'white';
+                    ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                    if (gridSize <= 100) {
+                        ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                    }
+                }
+            }
+        }
+
+        function randomizeGrid() {
+            grid.forEach((row, y) => {
+                row.forEach((_, x) => {
+                    grid[y][x] = Math.random() < 0.2 ? 1 : 0;
+                });
+            });
+            drawGrid();
+        }
+
+        function step() {
+            const newGrid = grid.map((row, y) => row.map((cell, x) => {
+                const neighbors = [
+                    grid[y - 1]?.[x - 1], grid[y - 1]?.[x], grid[y - 1]?.[x + 1],
+                    grid[y]?.[x - 1], grid[y]?.[x + 1],
+                    grid[y + 1]?.[x - 1], grid[y + 1]?.[x], grid[y + 1]?.[x + 1]
+                ].filter(Boolean).reduce((a, b) => a + b, 0);
+                return (cell && neighbors === 2) || neighbors === 3 ? 1 : 0;
+            }));
+            grid = newGrid;
+            drawGrid();
+        }
+
+        function toggleRun() {
+            running = !running;
+            document.getElementById('toggle').textContent = running ? 'Arrêter' : 'Démarrer';
+            if (running) run();
+        }
+
+        function run() {
+            if (running) {
+                step();
+                setTimeout(run, gridSize <= 100 ? 100 : 200);
+            }
+        }
+
+        controls.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                const action = e.target.id;
+                if (action === 'random') randomizeGrid();
+                if (action === 'step') step();
+                if (action === 'toggle') toggleRun();
+                if (e.target.dataset.size) {
+                    gridSize = parseInt(e.target.dataset.size, 10);
+                    sizeLabel.textContent = `Taille : ${gridSize}x${gridSize}`;
+                    initGrid(gridSize);
+                    drawGrid();
+                }
+            }
+        });
+
+        window.addEventListener('resize', () => adjustCanvasSize(gridSize));
+
+        initGrid(gridSize);
+        drawGrid();
+    </script>
+</body>
+</html>
